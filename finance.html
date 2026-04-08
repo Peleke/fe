@@ -687,8 +687,8 @@ footer .wrap {
       <div class="hero-rune">ᚠ</div>
       <h1>Your personal<br><strong>finance agent.</strong></h1>
       <p class="hero-sub">Market intelligence, portfolio monitoring, and trading execution — delivered through your existing AI assistant. Not another app. An agent that works for you.</p>
-      <form class="hero-form" onsubmit="return false;">
-        <input type="email" placeholder="you@email.com" aria-label="Email address">
+      <form class="hero-form" onsubmit="subscribe(event, this)">
+        <input type="email" placeholder="you@email.com" aria-label="Email address" required>
         <button type="submit">Join waitlist</button>
       </form>
       <div class="hero-meta">
@@ -910,8 +910,8 @@ target. Tax-loss harvesting window open on TLT.
     <div class="final-rune">ᚠ</div>
     <h2>Your money deserves an agent.</h2>
     <p>First 500 get early access to the Fe Market Briefing.</p>
-    <form class="final-form" onsubmit="return false;">
-      <input type="email" placeholder="you@email.com" aria-label="Email address">
+    <form class="final-form" onsubmit="subscribe(event, this)">
+      <input type="email" placeholder="you@email.com" aria-label="Email address" required>
       <button type="submit">Get early access</button>
     </form>
     <div class="final-note">No spam. No ads. Just intelligence.</div>
@@ -1018,6 +1018,42 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 reveals.forEach(el => observer.observe(el));
+
+// Subscribe form handler
+async function subscribe(e, form) {
+  e.preventDefault();
+  const btn = form.querySelector('button');
+  const input = form.querySelector('input[type="email"]');
+  const email = input.value.trim();
+  if (!email) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Joining...';
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    if (res.ok) {
+      btn.textContent = 'You\'re in ✓';
+      btn.style.background = 'var(--teal)';
+      input.value = '';
+      input.placeholder = 'Welcome to Fe';
+      input.disabled = true;
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = form.classList.contains('hero-form') ? 'Join waitlist' : 'Get early access'; }, 2000);
+    }
+  } catch {
+    btn.textContent = 'Try again';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = form.classList.contains('hero-form') ? 'Join waitlist' : 'Get early access'; }, 2000);
+  }
+}
 </script>
 
 </body>
