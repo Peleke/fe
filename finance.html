@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fe — Your personal finance agent</title>
+<meta name="description" content="AI-powered market intelligence, portfolio monitoring, and trading execution — delivered through your existing AI assistant.">
+<meta property="og:title" content="Fe — Your personal finance agent">
+<meta property="og:description" content="Market intelligence, portfolio monitoring, and trading execution through your AI assistant. Built on OpenClaw. Integrated with eToro.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+:root {
+  --bg: #08080a;
+  --surface: #101014;
+  --surface-2: #18181e;
+  --surface-3: #222228;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-gold: rgba(196, 160, 56, 0.2);
+
+  --gold: #c9a84c;
+  --gold-bright: #e2c56e;
+  --gold-dim: rgba(201, 168, 76, 0.15);
+  --gold-glow: rgba(201, 168, 76, 0.08);
+
+  --teal: #5bb8b0;
+  --teal-dim: rgba(91, 184, 176, 0.12);
+
+  --text: #e6e4df;
+  --text-2: #a09e96;
+  --text-3: #646260;
+
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
+
+/* === LAYOUT === */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+.wrap--narrow { max-width: 800px; }
+
+/* === NAV === */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.2rem 0;
+  background: rgba(8, 8, 10, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+nav .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.75rem;
+  text-decoration: none; color: var(--text);
+}
+.nav-rune {
+  font-size: 1.6rem; color: var(--gold);
+  text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(201, 168, 76, 0.04);
+}
+.nav-name {
+  font-family: var(--mono); font-size: 0.85rem;
+  font-weight: 500; letter-spacing: 0.08em;
+}
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  font-size: 0.8rem; color: var(--text-2); text-decoration: none;
+  font-family: var(--mono); letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  padding: 0.5rem 1.2rem !important;
+  background: var(--gold) !important;
+  color: var(--bg) !important;
+  border-radius: 4px;
+  font-weight: 500 !important;
+  transition: all 0.2s !important;
+}
+.nav-cta:hover { background: var(--gold-bright) !important; }
+
+/* === HERO === */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding-top: 5rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+#hero-chart {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0.12;
+}
+.hero-gradient {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 60%, rgba(201, 168, 76, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 40%, rgba(91, 184, 176, 0.03) 0%, transparent 60%);
+}
+.hero-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 30%;
+  background: linear-gradient(to top, var(--bg), transparent);
+}
+.hero-content {
+  position: relative; z-index: 1;
+  max-width: 640px;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-tag::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--gold);
+}
+.hero-rune {
+  font-size: 6rem; line-height: 1;
+  color: var(--gold);
+  text-shadow:
+    0 0 60px rgba(201, 168, 76, 0.15),
+    0 0 120px rgba(201, 168, 76, 0.05);
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+}
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 300; line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
+}
+.hero h1 strong { font-weight: 500; color: var(--gold); }
+.hero-sub {
+  font-size: 1.1rem; color: var(--text-2);
+  line-height: 1.7; margin-bottom: 2.5rem;
+  max-width: 520px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+}
+.hero-form {
+  display: flex; gap: 0.5rem;
+  margin-bottom: 1rem;
+  opacity: 0; animation: fadeUp 0.8s ease 1s forwards;
+}
+.hero-form input {
+  flex: 1; padding: 0.85rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text); font-family: var(--sans);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.hero-form input::placeholder { color: var(--text-3); }
+.hero-form input:focus { border-color: var(--gold); }
+.hero-form button {
+  padding: 0.85rem 2rem;
+  background: var(--gold);
+  color: var(--bg);
+  border: none; border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.hero-form button:hover { background: var(--gold-bright); }
+.hero-meta {
+  display: flex; align-items: center; gap: 1.5rem;
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--text-3); letter-spacing: 0.02em;
+  opacity: 0; animation: fadeUp 0.8s ease 1.2s forwards;
+}
+.hero-meta span { display: flex; align-items: center; gap: 0.4rem; }
+.hero-meta .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal);
+}
+
+/* === PROBLEM === */
+.problem { padding: 8rem 0; }
+.section-tag {
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.problem h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  max-width: 600px;
+}
+.problem h2 em {
+  font-style: normal;
+  color: var(--gold);
+}
+.problem-sub {
+  font-size: 1rem; color: var(--text-2);
+  max-width: 560px; margin-bottom: 4rem;
+}
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.pain-card {
+  padding: 2.5rem 2rem;
+  background: var(--surface);
+  transition: background 0.3s;
+}
+.pain-card:hover { background: var(--surface-2); }
+.pain-icon {
+  font-size: 1.4rem; margin-bottom: 1.2rem;
+  opacity: 0.8;
+}
+.pain-card h3 {
+  font-size: 0.95rem; font-weight: 500;
+  margin-bottom: 0.8rem; color: var(--text);
+}
+.pain-card p {
+  font-size: 0.85rem; color: var(--text-2);
+  line-height: 1.65;
+}
+.pain-card .pain-quote {
+  margin-top: 1.2rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 0.72rem;
+  color: var(--text-3); font-style: italic;
+  line-height: 1.6;
+}
+
+/* === PREVIEW === */
+.preview { padding: 6rem 0 8rem; }
+.preview h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.preview-sub {
+  font-size: 1rem; color: var(--text-2);
+  max-width: 520px; margin-bottom: 3rem;
+}
+.terminal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 700px;
+}
+.terminal-bar {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.terminal-dot--r { background: #ff5f56; }
+.terminal-dot--y { background: #ffbd2e; }
+.terminal-dot--g { background: #27ca40; }
+.terminal-title {
+  flex: 1; text-align: center;
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--text-3); letter-spacing: 0.04em;
+}
+.terminal-body { padding: 1.5rem; }
+.msg {
+  display: flex; gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.msg:last-child { margin-bottom: 0; }
+.msg-avatar {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0;
+  margin-top: 2px;
+}
+.msg-avatar--fe {
+  background: var(--gold-dim);
+  color: var(--gold);
+  font-weight: 600;
+}
+.msg-avatar--sys {
+  background: var(--teal-dim);
+  color: var(--teal);
+  font-size: 0.6rem;
+}
+.msg-content { flex: 1; }
+.msg-name {
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--text-3); margin-bottom: 0.3rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.msg-time { font-size: 0.6rem; color: var(--text-3); opacity: 0.5; }
+.msg-text {
+  font-size: 0.85rem; color: var(--text-2);
+  line-height: 1.65;
+}
+.msg-text strong { color: var(--text); font-weight: 500; }
+.msg-text .up { color: var(--teal); }
+.msg-text .down { color: #e05555; }
+.msg-text .gold { color: var(--gold); }
+.msg-data {
+  margin-top: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+
+/* === FEATURES === */
+.features { padding: 8rem 0; }
+.features h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 3.5rem;
+}
+.bento {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.bento-card {
+  padding: 2.5rem;
+  background: var(--surface);
+  transition: background 0.3s;
+}
+.bento-card:hover { background: var(--surface-2); }
+.bento-card--wide {
+  grid-column: 1 / -1;
+}
+.bento-label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.bento-label--gold { color: var(--gold); }
+.bento-label--teal { color: var(--teal); }
+.bento-label--text { color: var(--text-3); }
+.bento-card h3 {
+  font-size: 1.15rem; font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+.bento-card p {
+  font-size: 0.87rem; color: var(--text-2);
+  line-height: 1.65;
+}
+.bento-tag {
+  display: inline-block; margin-top: 1rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--gold-dim);
+  border-radius: 4px;
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--gold); letter-spacing: 0.04em;
+}
+.bento-tag--teal {
+  background: var(--teal-dim);
+  color: var(--teal);
+}
+
+/* === METRICS === */
+.metrics {
+  padding: 4rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+.metric-num {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 300;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+}
+.metric-label {
+  font-family: var(--mono); font-size: 0.68rem;
+  color: var(--text-3); letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* === ROADMAP === */
+.roadmap { padding: 8rem 0; }
+.roadmap h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.roadmap-sub {
+  font-size: 1rem; color: var(--text-2);
+  max-width: 520px; margin-bottom: 4rem;
+}
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+.timeline::before {
+  content: ''; position: absolute;
+  left: 3px; top: 8px; bottom: 8px;
+  width: 1px; background: var(--border-gold);
+}
+.timeline-item {
+  position: relative;
+  padding: 0 0 3rem 2rem;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -2rem; top: 6px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.3);
+}
+.timeline-dot--future {
+  background: var(--surface-3);
+  border: 1px solid var(--text-3);
+  box-shadow: none;
+}
+.timeline-date {
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+.timeline-date--future { color: var(--text-3); }
+.timeline-title {
+  font-size: 1.05rem; font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.timeline-desc {
+  font-size: 0.85rem; color: var(--text-2);
+  line-height: 1.6;
+}
+.timeline-badge {
+  display: inline-block; margin-top: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.timeline-badge--live {
+  background: var(--gold-dim); color: var(--gold);
+}
+.timeline-badge--next {
+  background: var(--teal-dim); color: var(--teal);
+}
+.timeline-badge--planned {
+  background: rgba(255,255,255,0.04); color: var(--text-3);
+}
+
+/* === BUILD IN PUBLIC === */
+.public { padding: 6rem 0 8rem; }
+.public h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.public-sub {
+  font-size: 1rem; color: var(--text-2);
+  max-width: 540px; margin-bottom: 3rem;
+}
+.channels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.channel {
+  padding: 2rem 1.5rem;
+  background: var(--surface);
+  text-decoration: none; color: var(--text);
+  transition: background 0.3s;
+}
+.channel:hover { background: var(--surface-2); }
+.channel-icon {
+  font-size: 1.3rem; margin-bottom: 1rem;
+}
+.channel h4 {
+  font-size: 0.9rem; font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.channel p {
+  font-size: 0.78rem; color: var(--text-3);
+  line-height: 1.5;
+}
+
+/* === FINAL CTA === */
+.final-cta {
+  padding: 8rem 0;
+  text-align: center;
+}
+.final-rune {
+  font-size: 3rem; color: var(--gold);
+  text-shadow: 0 0 60px rgba(201, 168, 76, 0.12);
+  margin-bottom: 2rem;
+}
+.final-cta h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 300; line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.final-cta p {
+  font-size: 1rem; color: var(--text-2);
+  margin-bottom: 2.5rem;
+}
+.final-form {
+  display: flex; gap: 0.5rem;
+  max-width: 460px; margin: 0 auto 1rem;
+}
+.final-form input {
+  flex: 1; padding: 0.85rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text); font-family: var(--sans);
+  font-size: 0.9rem; outline: none;
+  transition: border-color 0.2s;
+}
+.final-form input::placeholder { color: var(--text-3); }
+.final-form input:focus { border-color: var(--gold); }
+.final-form button {
+  padding: 0.85rem 2rem;
+  background: var(--gold); color: var(--bg);
+  border: none; border-radius: 6px;
+  font-family: var(--mono); font-size: 0.8rem;
+  font-weight: 500; letter-spacing: 0.05em;
+  cursor: pointer; transition: all 0.2s;
+  white-space: nowrap;
+}
+.final-form button:hover { background: var(--gold-bright); }
+.final-note {
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--text-3); letter-spacing: 0.04em;
+}
+
+/* === FOOTER === */
+footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+}
+footer .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-left {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.footer-rune { font-size: 1.2rem; color: var(--gold); }
+.footer-copy {
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--text-3);
+}
+.footer-links {
+  display: flex; gap: 1.5rem;
+}
+.footer-links a {
+  font-family: var(--mono); font-size: 0.7rem;
+  color: var(--text-3); text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* === ANIMATIONS === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.18; }
+}
+
+/* === SCROLL REVEAL === */
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1; transform: translateY(0);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .wrap { padding: 0 1.25rem; }
+  .hero-content { max-width: 100%; }
+  .hero-form { flex-direction: column; }
+  .hero-meta { flex-wrap: wrap; gap: 1rem; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .bento { grid-template-columns: 1fr; }
+  .bento-card--wide { grid-column: 1; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+  .channels { grid-template-columns: repeat(2, 1fr); }
+  .final-form { flex-direction: column; }
+  .nav-links { display: none; }
+  footer .wrap { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+@media (max-width: 480px) {
+  .channels { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <a href="#" class="nav-logo">
+      <span class="nav-rune">ᚠ</span>
+      <span class="nav-name">Fe</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#public">Follow</a>
+      <a href="#waitlist" class="nav-cta">Join waitlist</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <svg id="hero-chart"></svg>
+    <div class="hero-gradient"></div>
+    <div class="hero-fade"></div>
+  </div>
+  <div class="wrap">
+    <div class="hero-content">
+      <div class="hero-tag">Now accepting early access</div>
+      <div class="hero-rune">ᚠ</div>
+      <h1>Your personal<br><strong>finance agent.</strong></h1>
+      <p class="hero-sub">Market intelligence, portfolio monitoring, and trading execution — delivered through your existing AI assistant. Not another app. An agent that works for you.</p>
+      <form class="hero-form" onsubmit="return false;">
+        <input type="email" placeholder="you@email.com" aria-label="Email address">
+        <button type="submit">Join waitlist</button>
+      </form>
+      <div class="hero-meta">
+        <span><span class="dot"></span> Built on OpenClaw</span>
+        <span>Integrated with eToro</span>
+        <span>Self-hosted</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem reveal">
+  <div class="wrap">
+    <div class="section-tag">The problem</div>
+    <h2>AI helps with everything now.<br><em>Except your money.</em></h2>
+    <p class="problem-sub">Your AI assistant writes code, drafts emails, and manages your calendar. But the moment you need financial intelligence, you're back to checking five different apps and hoping you don't miss something.</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">◇</div>
+        <h3>Tools that can't execute</h3>
+        <p>AI investing apps analyze but can't trade. Research tools surface data but can't act. You still do everything manually.</p>
+        <div class="pain-quote">"Magnifi has no in-app trading. Incite AI doesn't learn from your preferences." — RockFlow 2026 Review</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">◈</div>
+        <h3>Robo-advisors that demand surrender</h3>
+        <p>Hand over your portfolio, accept their allocation, lose all control. Personalization means picking "aggressive" or "conservative."</p>
+        <div class="pain-quote">"Locked into fixed asset allocations with little room for personalized strategies." — Market Analysis</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">◆</div>
+        <h3>Crypto agents that are vaporware</h3>
+        <p>550+ AI agent crypto projects listed. 80% are token-first, product-second. The ones that execute have no risk management.</p>
+        <div class="pain-quote">"$40M breach due to excessive permissions and lack of proper isolation." — KuCoin Security Report</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW -->
+<section class="preview reveal">
+  <div class="wrap">
+    <div class="section-tag">Product preview</div>
+    <h2>Your morning briefing, delivered.</h2>
+    <p class="preview-sub">Fe distills market intelligence into actionable insights, delivered through the messaging surface you already use.</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot terminal-dot--r"></span>
+        <span class="terminal-dot terminal-dot--y"></span>
+        <span class="terminal-dot terminal-dot--g"></span>
+        <span class="terminal-title">fe — market briefing · apr 8, 2026</span>
+      </div>
+      <div class="terminal-body">
+        <div class="msg">
+          <div class="msg-avatar msg-avatar--fe">ᚠ</div>
+          <div class="msg-content">
+            <div class="msg-name">Fe <span class="msg-time">7:02 AM</span></div>
+            <div class="msg-text">
+              <strong>Morning Briefing — Apr 8</strong><br>
+              Futures flat overnight. <span class="up">S&P +0.12%</span> pre-market. <span class="down">10Y yield up 4bp to 4.38%</span> after stronger-than-expected jobs data. Fed funds futures now pricing <span class="gold">68% probability</span> of hold in June.
+            </div>
+            <div class="msg-data">
+<strong>Your Portfolio Impact</strong>
+SPY  position:  <span class="up">+$142</span>  (overnight)
+TLT  position:  <span class="down">-$89</span>   (rate sensitivity)
+BTC  position:  <span class="up">+$310</span>  (correlation breakout)
+
+<span class="gold">⚡ Rebalancing signal:</span> Bond allocation 2.3% below
+target. Tax-loss harvesting window open on TLT.
+            </div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar msg-avatar--sys">▸</div>
+          <div class="msg-content">
+            <div class="msg-name">Action available <span class="msg-time">7:02 AM</span></div>
+            <div class="msg-text">
+              <span class="gold">Harvest TLT loss ($89)</span> and rotate to VGLT? Estimated tax savings: <strong>$24.70</strong>. Reply <strong>yes</strong> to execute via eToro, or <strong>details</strong> for full analysis.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features reveal" id="features">
+  <div class="wrap">
+    <div class="section-tag">What Fe does</div>
+    <h2>Four skills. One agent.</h2>
+    <div class="bento">
+      <div class="bento-card">
+        <div class="bento-label bento-label--gold">Market Briefing</div>
+        <h3>Intelligence, not noise</h3>
+        <p>Daily market digest tailored to your holdings. Macro moves, sector rotation, earnings impact — filtered through what actually matters to your portfolio. Delivered via Telegram, Slack, or any messaging surface.</p>
+        <span class="bento-tag">Shipping Q2 2026</span>
+      </div>
+      <div class="bento-card">
+        <div class="bento-label bento-label--teal">Portfolio Monitor</div>
+        <h3>Watch everything. Miss nothing.</h3>
+        <p>Real-time alerts for rebalancing opportunities, risk threshold breaches, and tax-loss harvesting windows. Connected to your brokerage via API.</p>
+        <span class="bento-tag--teal bento-tag">Q3 2026</span>
+      </div>
+      <div class="bento-card">
+        <div class="bento-label bento-label--gold">Trading Agent</div>
+        <h3>Execute with guardrails</h3>
+        <p>Human-in-the-loop execution. Fe suggests, you approve. Position sizing, stop-loss logic, and correlation-aware risk management built in. No reckless autonomy.</p>
+        <span class="bento-tag">Q4 2026</span>
+      </div>
+      <div class="bento-card">
+        <div class="bento-label bento-label--text">DeFi Scout</div>
+        <h3>On-chain intelligence</h3>
+        <p>Protocol health monitoring, token unlock tracking, wallet analytics, and yield opportunity scanning. Powered by Dune, Nansen, and DeFi Llama APIs.</p>
+        <span class="bento-tag" style="background:rgba(255,255,255,0.04);color:var(--text-3)">2027</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics reveal">
+  <div class="wrap">
+    <div class="metrics-grid">
+      <div>
+        <div class="metric-num">$92.5B</div>
+        <div class="metric-label">AI in finance market<br>by 2035</div>
+      </div>
+      <div>
+        <div class="metric-num">58%</div>
+        <div class="metric-label">of retail investors<br>already use AI</div>
+      </div>
+      <div>
+        <div class="metric-num">87%</div>
+        <div class="metric-label">would delegate to<br>an AI agent</div>
+      </div>
+      <div>
+        <div class="metric-num">46%</div>
+        <div class="metric-label">YoY growth in AI<br>tool usage on eToro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap reveal" id="roadmap">
+  <div class="wrap wrap--narrow">
+    <div class="section-tag">Roadmap</div>
+    <h2>Built in public. Shipped in stages.</h2>
+    <p class="roadmap-sub">Each milestone produces a deployable skill, a notebook documenting the finance, and a live event walking through the build.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">Q2 2026</div>
+        <div class="timeline-title">Fe Market Briefing</div>
+        <div class="timeline-desc">Daily AI-generated financial intelligence. Macro analysis, portfolio impact, actionable signals. Delivered via newsletter + messaging.</div>
+        <span class="timeline-badge timeline-badge--live">Building now</span>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">Q3 2026</div>
+        <div class="timeline-title">Fe Portfolio Monitor</div>
+        <div class="timeline-desc">eToro API integration. Real-time rebalancing alerts, risk monitoring, tax-loss harvesting automation. OpenClaw skill on ClawHub.</div>
+        <span class="timeline-badge timeline-badge--next">Next up</span>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot timeline-dot--future"></div>
+        <div class="timeline-date timeline-date--future">Q4 2026</div>
+        <div class="timeline-title">Fe Trading Agent</div>
+        <div class="timeline-desc">Human-in-the-loop execution engine. Position sizing, correlation-aware risk management, audit trail. You approve, Fe executes.</div>
+        <span class="timeline-badge timeline-badge--planned">Planned</span>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot timeline-dot--future"></div>
+        <div class="timeline-date timeline-date--future">2027</div>
+        <div class="timeline-title">Fe DeFi Scout</div>
+        <div class="timeline-desc">On-chain analytics via Dune, Nansen, DeFi Llama. Protocol evaluation, wallet monitoring, yield optimization. The crypto intelligence layer.</div>
+        <span class="timeline-badge timeline-badge--planned">Planned</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD IN PUBLIC -->
+<section class="public reveal" id="public">
+  <div class="wrap">
+    <div class="section-tag">Follow the build</div>
+    <h2>We're building Fe live.</h2>
+    <p class="public-sub">Every concept explained. Every decision documented. Every skill shipped in public. Follow along and learn the finance as we build the agent.</p>
+    <div class="channels">
+      <a href="#" class="channel">
+        <div class="channel-icon">✉</div>
+        <h4>Newsletter</h4>
+        <p>Weekly Fe Briefing — market intelligence + build updates</p>
+      </a>
+      <a href="#" class="channel">
+        <div class="channel-icon">▶</div>
+        <h4>TikTok</h4>
+        <p>Finance concepts in 60 seconds. Agent-generated content.</p>
+      </a>
+      <a href="#" class="channel">
+        <div class="channel-icon">◉</div>
+        <h4>Luma Events</h4>
+        <p>Live builds. Portfolio math. VC mechanics. Free.</p>
+      </a>
+      <a href="#" class="channel">
+        <div class="channel-icon">⌘</div>
+        <h4>GitHub</h4>
+        <p>Open-source core. fe-core library + OpenClaw skills.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta reveal" id="waitlist">
+  <div class="wrap">
+    <div class="final-rune">ᚠ</div>
+    <h2>Your money deserves an agent.</h2>
+    <p>First 500 get early access to the Fe Market Briefing.</p>
+    <form class="final-form" onsubmit="return false;">
+      <input type="email" placeholder="you@email.com" aria-label="Email address">
+      <button type="submit">Get early access</button>
+    </form>
+    <div class="final-note">No spam. No ads. Just intelligence.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-left">
+      <span class="footer-rune">ᚠ</span>
+      <span class="footer-copy">Fe · 2026</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Newsletter</a>
+      <a href="#">GitHub</a>
+      <a href="#">TikTok</a>
+      <a href="#">Twitter</a>
+    </div>
+  </div>
+</footer>
+
+<!-- D3 Hero Chart Animation -->
+<script>
+(function() {
+  const svg = d3.select('#hero-chart');
+  const container = svg.node().parentElement;
+
+  function draw() {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+
+    svg.attr('viewBox', `0 0 ${w} ${h}`).attr('preserveAspectRatio', 'none');
+    svg.selectAll('*').remove();
+
+    const lines = 5;
+    const points = 80;
+    const gold = 'rgba(201,168,76,';
+
+    for (let l = 0; l < lines; l++) {
+      const data = [];
+      let y = h * (0.3 + l * 0.12);
+      const volatility = 20 + l * 8;
+      const drift = (l % 2 === 0 ? -0.3 : 0.5) * (h * 0.001);
+
+      for (let i = 0; i <= points; i++) {
+        y += (Math.random() - 0.48 + drift) * volatility;
+        y = Math.max(h * 0.1, Math.min(h * 0.9, y));
+        data.push({ x: (i / points) * w, y });
+      }
+
+      const line = d3.line().x(d => d.x).y(d => d.y).curve(d3.curveMonotoneX);
+
+      const opacity = 0.25 - l * 0.04;
+      const path = svg.append('path')
+        .datum(data)
+        .attr('d', line)
+        .attr('fill', 'none')
+        .attr('stroke', `${gold}${opacity})`)
+        .attr('stroke-width', 1.5 - l * 0.15);
+
+      const totalLength = path.node().getTotalLength();
+      path
+        .attr('stroke-dasharray', totalLength)
+        .attr('stroke-dashoffset', totalLength)
+        .transition()
+        .duration(2000 + l * 400)
+        .delay(l * 200)
+        .ease(d3.easeQuadOut)
+        .attr('stroke-dashoffset', 0);
+
+      // Area fill
+      const area = d3.area()
+        .x(d => d.x).y0(h).y1(d => d.y)
+        .curve(d3.curveMonotoneX);
+
+      svg.append('path')
+        .datum(data)
+        .attr('d', area)
+        .attr('fill', `${gold}${opacity * 0.15})`)
+        .attr('opacity', 0)
+        .transition()
+        .duration(2000 + l * 400)
+        .delay(l * 200 + 800)
+        .attr('opacity', 1);
+    }
+  }
+
+  draw();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(draw, 250);
+  });
+})();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
