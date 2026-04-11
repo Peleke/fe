@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fe — One Pager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080a;
+  --surface: #101014;
+  --surface-2: #18181e;
+  --border: rgba(255, 255, 255, 0.08);
+  --gold: #c9a84c;
+  --gold-bright: #e2c56e;
+  --gold-dim: rgba(201, 168, 76, 0.15);
+  --teal: #5bb8b0;
+  --teal-dim: rgba(91, 184, 176, 0.12);
+  --text: #e6e4df;
+  --text-2: #a09e96;
+  --text-3: #646260;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.55in 0.6in;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 0;
+}
+
+/* === HEADER === */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 0.35in;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.3in;
+}
+.header-left { display: flex; align-items: center; gap: 0.5rem; }
+.header-rune {
+  font-size: 2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.header-text {}
+.header-name {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+.header-tagline {
+  font-size: 0.72rem;
+  color: var(--text-2);
+  margin-top: 0.15rem;
+}
+.header-right {
+  text-align: right;
+}
+.header-url {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--gold);
+  letter-spacing: 0.03em;
+}
+.header-contact {
+  font-size: 0.62rem;
+  color: var(--text-3);
+  margin-top: 0.15rem;
+}
+
+/* === PITCH LINE === */
+.pitch {
+  margin-bottom: 0.3in;
+}
+.pitch h1 {
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.pitch h1 strong {
+  font-weight: 500;
+  color: var(--gold);
+}
+.pitch-sub {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  margin-top: 0.4rem;
+  line-height: 1.6;
+  max-width: 5.5in;
+}
+
+/* === TWO-COLUMN BODY === */
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4in;
+  margin-bottom: 0.3in;
+}
+.col {}
+
+/* === SECTION LABELS === */
+.label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+}
+.label--teal { color: var(--teal); border-color: rgba(91, 184, 176, 0.15); }
+.label--dim { color: var(--text-3); border-color: var(--border); }
+
+/* === SECTION SPACING === */
+.section { margin-bottom: 0.28in; }
+.section:last-child { margin-bottom: 0; }
+
+/* === TEXT === */
+.section p {
+  font-size: 0.7rem;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+.section p + p { margin-top: 0.35rem; }
+.section p strong { color: var(--text); font-weight: 500; }
+.section p em { font-style: normal; color: var(--gold); }
+
+/* === PAIN LIST === */
+.pain-list {
+  list-style: none;
+}
+.pain-list li {
+  font-size: 0.68rem;
+  color: var(--text-2);
+  line-height: 1.55;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  display: flex;
+  gap: 0.4rem;
+}
+.pain-list li:last-child { border-bottom: none; }
+.pain-list .pain-marker {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+/* === METRICS ROW === */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.15in;
+  padding: 0.2in 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.3in;
+}
+.metric { text-align: center; }
+.metric-num {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+}
+.metric-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--text-3);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  margin-top: 0.15rem;
+}
+
+/* === TIMELINE === */
+.timeline-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.12in;
+}
+.tl-item {
+  padding: 0.4rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.tl-date {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.15rem;
+}
+.tl-date--future { color: var(--text-3); }
+.tl-title {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.1rem;
+}
+.tl-desc {
+  font-size: 0.52rem;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+.tl-badge {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tl-badge--live { background: var(--gold-dim); color: var(--gold); }
+.tl-badge--next { background: var(--teal-dim); color: var(--teal); }
+.tl-badge--planned { background: rgba(255,255,255,0.04); color: var(--text-3); }
+
+/* === REVENUE MODEL === */
+.rev-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.1in;
+}
+.rev-tier {
+  padding: 0.35rem 0.45rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.rev-price {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--gold);
+  margin-bottom: 0.1rem;
+}
+.rev-name {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.05rem;
+}
+.rev-desc {
+  font-size: 0.5rem;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+/* === FOOTER === */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.25in;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+.footer-left {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--text-3);
+}
+.footer-right {
+  display: flex;
+  gap: 1.2rem;
+}
+.footer-right span {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  color: var(--text-3);
+  letter-spacing: 0.03em;
+}
+.footer-right .gold { color: var(--gold); }
+
+/* === PRINT === */
+@media print {
+  body { background: #08080a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { margin: 0; padding: 0.5in; }
+}
+
+@page {
+  size: letter;
+  margin: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <span class="header-rune">&#5765;</span>
+      <div class="header-text">
+        <div class="header-name">Fe</div>
+        <div class="header-tagline">Agentic Portfolio Intelligence</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-url">fe.peleke.me</div>
+      <div class="header-contact">peleke.s@protonmail.com &middot; April 2026</div>
+    </div>
+  </div>
+
+  <!-- PITCH -->
+  <div class="pitch">
+    <h1>The agent skill layer for <strong>AI-native finance.</strong></h1>
+    <p class="pitch-sub">eToro just opened Agent Portfolios to AI agents. OpenClaw is one of four supported platforms. Nobody has built the financial intelligence middleware that sits on top of that access. Fe is that layer: market briefings, portfolio monitoring, and human-in-the-loop execution &mdash; delivered through the AI assistant you already use.</p>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-num">$92.5B</div>
+      <div class="metric-label">AI in finance<br>market by 2035</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">30M+</div>
+      <div class="metric-label">eToro users with<br>agent access</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">87%</div>
+      <div class="metric-label">of crypto users would<br>delegate to an agent</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">46%</div>
+      <div class="metric-label">YoY growth in AI<br>tool usage on eToro</div>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN BODY -->
+  <div class="body">
+
+    <!-- LEFT COLUMN -->
+    <div class="col">
+
+      <div class="section">
+        <div class="label">The Problem</div>
+        <ul class="pain-list">
+          <li>
+            <span class="pain-marker">&#9671;</span>
+            <span><strong>AI helps with everything except your money.</strong> AI investing apps analyze but can't execute. Research tools surface data but can't act. You still do everything manually.</span>
+          </li>
+          <li>
+            <span class="pain-marker">&#9672;</span>
+            <span><strong>Robo-advisors demand control surrender.</strong> Hand over your portfolio, accept their allocation, lose all customization. Schwab just exited the middle tier entirely.</span>
+          </li>
+          <li>
+            <span class="pain-marker">&#9670;</span>
+            <span><strong>Crypto agents are vaporware or reckless.</strong> 550+ projects, 80% token-first. The ones that execute have no risk management. $40M breach from excessive agent permissions.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="label">Why Now</div>
+        <p><em>eToro launched Agent Portfolios</em> with explicit OpenClaw support &mdash; the first retail brokerage to offer ring-fenced AI trading sub-portfolios. The API door is open. Nobody has built the hallway.</p>
+        <p><strong>Schwab exited middle-tier robo-advice</strong> in Jan 2026. The market is bifurcating: either full automation or premium advisory. Fe occupies the gap &mdash; an agent that's smarter than a robo-advisor and safer than full autonomy.</p>
+      </div>
+
+      <div class="section">
+        <div class="label--dim label">Revenue Model</div>
+        <div class="rev-grid">
+          <div class="rev-tier">
+            <div class="rev-price">Free</div>
+            <div class="rev-name">Briefing</div>
+            <div class="rev-desc">Daily market digest via newsletter</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rev-price">$19/mo</div>
+            <div class="rev-name">Pro</div>
+            <div class="rev-desc">Portfolio monitoring, alerts, signals</div>
+          </div>
+          <div class="rev-tier">
+            <div class="rev-price">$199/yr</div>
+            <div class="rev-name">Agent</div>
+            <div class="rev-desc">Execution, TLH, rebalancing</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+
+      <div class="section">
+        <div class="label label--teal">The Solution</div>
+        <p>Fe is an <strong>OpenClaw skill</strong> that turns your AI assistant into a financial agent. It monitors your portfolio, generates daily briefings from real market data, and executes trades with your permission &mdash; never autonomously.</p>
+        <p><strong>Not another dashboard.</strong> Fe delivers through Telegram, Slack, Discord, or any messaging surface. You talk to it the way you'd talk to a smart friend who watches the markets for you.</p>
+        <p>Every trade intent is signed. Every risk check produces a validation artifact. On-chain reputation via <strong>ERC-8004</strong> means Fe's track record is verifiable &mdash; not a marketing page, a registry anyone can audit.</p>
+      </div>
+
+      <div class="section">
+        <div class="label label--teal">Moat</div>
+        <ul class="pain-list">
+          <li>
+            <span class="pain-marker" style="color:var(--teal)">&#9656;</span>
+            <span><strong>Built on OpenClaw, already on eToro.</strong> OpenClaw is one of 4 supported agent platforms. 30M+ users. Fe inherits that distribution.</span>
+          </li>
+          <li>
+            <span class="pain-marker" style="color:var(--teal)">&#9656;</span>
+            <span><strong>Verifiable trust via ERC-8004.</strong> On-chain agent identity, reputation scores, and validation artifacts. No other retail financial agent has this.</span>
+          </li>
+          <li>
+            <span class="pain-marker" style="color:var(--teal)">&#9656;</span>
+            <span><strong>Composable skill architecture.</strong> Fe skills run on any OpenClaw-compatible assistant. ClawHub distribution is a built-in marketplace.</span>
+          </li>
+          <li>
+            <span class="pain-marker" style="color:var(--teal)">&#9656;</span>
+            <span><strong>Published research on agent trust.</strong> The AX series on agent experience design establishes thought leadership in the trust layer nobody else is building.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="label--dim label">Team</div>
+        <p><strong>Peleke Sengstacke</strong> &mdash; AI/ML engineer, curriculum designer, full-stack builder. Builds agent skills on OpenClaw. Published the AX series on agent experience and tool trust mechanics.</p>
+        <p>Joined by an <strong>operations lead</strong> and <strong>head of engineering</strong>. Advisory network includes founders with fintech distribution experience.</p>
+      </div>
+
+      <div class="section">
+        <div class="label--dim label">The Ask</div>
+        <p><strong>Share one live build session with your AIops cohorts.</strong> We're running a 60-minute Luma event &mdash; &ldquo;From Signal to Skill&rdquo; &mdash; where we scaffold an autonomous finance agent from scratch using MCPs and OpenClaw skills. It maps directly to Units 2&ndash;7 of your syllabus. Your students get a real-world case study for their capstones. We get an audience.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section" style="margin-bottom: 0.2in;">
+    <div class="label">Roadmap</div>
+    <div class="timeline-row">
+      <div class="tl-item">
+        <div class="tl-date">Q2 2026</div>
+        <div class="tl-title">Market Briefing</div>
+        <div class="tl-desc">Daily AI-generated intelligence. Macro, portfolio impact, actionable signals.</div>
+        <span class="tl-badge tl-badge--live">Building now</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Q3 2026</div>
+        <div class="tl-title">Portfolio Monitor</div>
+        <div class="tl-desc">eToro API. Rebalancing alerts, risk monitoring, tax-loss harvesting.</div>
+        <span class="tl-badge tl-badge--next">Next</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date tl-date--future">Q4 2026</div>
+        <div class="tl-title">Trading Agent</div>
+        <div class="tl-desc">Human-in-the-loop execution. Position sizing, risk management, audit trail.</div>
+        <span class="tl-badge tl-badge--planned">Planned</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date tl-date--future">2027</div>
+        <div class="tl-title">DeFi Scout</div>
+        <div class="tl-desc">On-chain analytics. Protocol risk scoring, wallet monitoring, yield optimization.</div>
+        <span class="tl-badge tl-badge--planned">Planned</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">&#5765; Fe &middot; 2026 &middot; Confidential</div>
+    <div class="footer-right">
+      <span class="gold">fe.peleke.me</span>
+      <span>Built on OpenClaw</span>
+      <span>Integrated with eToro</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
