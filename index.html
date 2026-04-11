@@ -686,9 +686,9 @@ footer .wrap {
       <div class="hero-tag">Now accepting early access</div>
       <div class="hero-rune">ᚠ</div>
       <h1>Your on-chain<br><strong>finance agent.</strong></h1>
-      <p class="hero-sub">DeFi intelligence, cross-chain portfolio monitoring, and protocol-aware execution — delivered through your AI assistant. Not another dashboard. An agent that reads the chain.</p>
-      <form class="hero-form" onsubmit="return false;">
-        <input type="email" placeholder="you@email.com" aria-label="Email address">
+      <p class="hero-sub">DeFi intelligence, cross-chain portfolio monitoring, and protocol-aware execution. All delivered through your AI assistant. Not another dashboard.</p>
+      <form class="hero-form" onsubmit="subscribe(event, this)">
+        <input type="email" placeholder="you@email.com" aria-label="Email address" required>
         <button type="submit">Join waitlist</button>
       </form>
       <div class="hero-meta">
@@ -785,26 +785,26 @@ Your ARB exposure: $2,100. Consider hedging.
     <div class="bento">
       <div class="bento-card">
         <div class="bento-label bento-label--gold">DeFi Briefing</div>
-        <h3>Every chain. Every morning.</h3>
-        <p>Cross-chain intelligence tailored to your positions. Protocol health, whale movements, governance votes, token unlocks — filtered through what you actually hold. Delivered via Telegram, Slack, or Discord.</p>
+        <h3>Cross-chain. Every morning.</h3>
+        <p>Protocol health, whale movements, governance votes, token unlocks. Filtered through what you actually hold and delivered where you already are: Telegram, Slack, Discord.</p>
         <span class="bento-tag">Shipping Q2 2026</span>
       </div>
       <div class="bento-card">
         <div class="bento-label bento-label--teal">Position Monitor</div>
-        <h3>Watch every wallet. Every pool.</h3>
-        <p>Real-time alerts for impermanent loss thresholds, validator health, yield decay, and smart money movements near your positions. Connected to Dune, Nansen, and DeFi Llama.</p>
+        <h3>Alerts before problems hit.</h3>
+        <p>Impermanent loss thresholds, validator health, yield decay, smart money moving near your positions. Pulls from Dune, Nansen, and DeFi Llama so you don't have to.</p>
         <span class="bento-tag--teal bento-tag">Q3 2026</span>
       </div>
       <div class="bento-card">
         <div class="bento-label bento-label--gold">Execution Agent</div>
         <h3>Trade with guardrails</h3>
-        <p>Human-in-the-loop cross-chain execution via eToro. Hedging, rebalancing, and yield rotation — Fe suggests, you approve. MEV-aware, slippage-protected, audit-trailed.</p>
+        <p>Human-in-the-loop cross-chain execution via eToro. Fe suggests a hedge or rotation; you approve it. MEV-aware and slippage-protected, with a full audit trail.</p>
         <span class="bento-tag">Q4 2026</span>
       </div>
       <div class="bento-card">
         <div class="bento-label bento-label--text">Protocol Evaluator</div>
         <h3>Due diligence on autopilot</h3>
-        <p>Automated protocol risk scoring. Smart contract analysis, tokenomics modeling, team/treasury monitoring. Built for funds, usable by anyone.</p>
+        <p>Automated protocol risk scoring. Reads smart contracts, stress-tests tokenomics, and monitors team treasuries so you know what you're buying into before you commit capital.</p>
         <span class="bento-tag" style="background:rgba(255,255,255,0.04);color:var(--text-3)">2027</span>
       </div>
     </div>
@@ -860,14 +860,14 @@ Your ARB exposure: $2,100. Consider hedging.
         <div class="timeline-dot timeline-dot--future"></div>
         <div class="timeline-date timeline-date--future">Q4 2026</div>
         <div class="timeline-title">Fe Execution Agent</div>
-        <div class="timeline-desc">Cross-chain execution via eToro. Hedging, yield rotation, rebalancing — MEV-aware, slippage-protected, human-in-the-loop. You approve, Fe executes.</div>
+        <div class="timeline-desc">Cross-chain execution via eToro. You approve, Fe executes. MEV-aware, slippage-protected, with a complete audit trail for every trade.</div>
         <span class="timeline-badge timeline-badge--planned">Planned</span>
       </div>
       <div class="timeline-item">
         <div class="timeline-dot timeline-dot--future"></div>
         <div class="timeline-date timeline-date--future">2027</div>
         <div class="timeline-title">Fe Protocol Evaluator</div>
-        <div class="timeline-desc">Automated due diligence. Smart contract risk scoring, tokenomics stress testing, governance analysis. The intelligence layer crypto funds actually need.</div>
+        <div class="timeline-desc">Automated due diligence. Smart contract risk scoring, tokenomics stress testing, governance analysis. What crypto funds pay analysts to do, running as a skill.</div>
         <span class="timeline-badge timeline-badge--planned">Planned</span>
       </div>
     </div>
@@ -879,7 +879,7 @@ Your ARB exposure: $2,100. Consider hedging.
   <div class="wrap">
     <div class="section-tag">Follow the build</div>
     <h2>We're building Fe live.</h2>
-    <p class="public-sub">Every concept explained. Every decision documented. Every skill shipped in public. Follow along and learn the finance as we build the agent.</p>
+    <p class="public-sub">We explain the concepts, document the decisions, and ship the skills in the open. Follow along and learn the finance as we build the agent.</p>
     <div class="channels">
       <a href="#" class="channel">
         <div class="channel-icon">✉</div>
@@ -911,8 +911,8 @@ Your ARB exposure: $2,100. Consider hedging.
     <div class="final-rune">ᚠ</div>
     <h2>Your portfolio deserves an agent.</h2>
     <p>First 500 get early access to the Fe DeFi Briefing.</p>
-    <form class="final-form" onsubmit="return false;">
-      <input type="email" placeholder="you@email.com" aria-label="Email address">
+    <form class="final-form" onsubmit="subscribe(event, this)">
+      <input type="email" placeholder="you@email.com" aria-label="Email address" required>
       <button type="submit">Get early access</button>
     </form>
     <div class="final-note">No spam. No ads. Just intelligence.</div>
@@ -928,9 +928,9 @@ Your ARB exposure: $2,100. Consider hedging.
     </div>
     <div class="footer-links">
       <a href="#">Newsletter</a>
-      <a href="#">GitHub</a>
-      <a href="#">TikTok</a>
-      <a href="#">Twitter</a>
+      <a href="https://github.com/Peleke/fe">GitHub</a>
+      <a href="https://x.com/peleke_s">X</a>
+      <a href="https://warpcast.com/peleke">Farcaster</a>
     </div>
   </div>
 </footer>
@@ -1019,6 +1019,42 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 reveals.forEach(el => observer.observe(el));
+
+// Subscribe form handler
+async function subscribe(e, form) {
+  e.preventDefault();
+  const btn = form.querySelector('button');
+  const input = form.querySelector('input[type="email"]');
+  const email = input.value.trim();
+  if (!email) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Joining...';
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    if (res.ok) {
+      btn.textContent = 'You\'re in ✓';
+      btn.style.background = 'var(--teal)';
+      input.value = '';
+      input.placeholder = 'Welcome to Fe';
+      input.disabled = true;
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = form.classList.contains('hero-form') ? 'Join waitlist' : 'Get early access'; }, 2000);
+    }
+  } catch {
+    btn.textContent = 'Try again';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = form.classList.contains('hero-form') ? 'Join waitlist' : 'Get early access'; }, 2000);
+  }
+}
 </script>
 
 </body>
