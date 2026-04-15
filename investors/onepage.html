@@ -27,15 +27,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { overflow-x: hidden; }
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .page {
   width: 8.5in;
+  max-width: 100%;
   min-height: 11in;
   margin: 0 auto;
   padding: 0.55in 0.6in;
@@ -296,10 +300,29 @@ body {
 }
 .footer-right .gold { color: var(--gold); }
 
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .page { padding: 1.5rem 1.25rem; min-height: auto; }
+  .header { flex-direction: column; gap: 0.75rem; }
+  .header-right { text-align: left; }
+  .body { grid-template-columns: 1fr; gap: 1.5rem; }
+  .metrics { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .timeline-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .rev-grid { grid-template-columns: 1fr; gap: 0.5rem; }
+  .pitch-sub { max-width: 100%; }
+  .footer { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+  .footer-right { flex-wrap: wrap; gap: 0.75rem; }
+}
+@media (max-width: 480px) {
+  .page { padding: 1.25rem 1rem; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .timeline-row { grid-template-columns: 1fr; }
+}
+
 /* === PRINT === */
 @media print {
   body { background: #08080a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { margin: 0; padding: 0.5in; }
+  .page { margin: 0; padding: 0.5in; width: 8.5in; max-width: none; }
 }
 
 @page {
@@ -330,7 +353,7 @@ body {
   <!-- PITCH -->
   <div class="pitch">
     <h1>The agent skill layer for <strong>AI-native finance.</strong></h1>
-    <p class="pitch-sub">eToro just opened Agent Portfolios to AI agents. OpenClaw is one of four supported platforms. Nobody has built the financial intelligence middleware that sits on top of that access. Fe is that layer: market briefings, portfolio monitoring, and human-in-the-loop execution &mdash; delivered through the AI assistant you already use.</p>
+    <p class="pitch-sub">eToro just opened Agent Portfolios to AI agents. OpenClaw is one of four supported platforms. Nobody has built the financial intelligence middleware that sits on top of that access. Fe is that layer. It delivers market briefings, portfolio monitoring, and execution with human approval through the AI assistant you already use.</p>
   </div>
 
   <!-- METRICS -->
@@ -364,11 +387,11 @@ body {
         <ul class="pain-list">
           <li>
             <span class="pain-marker">&#9671;</span>
-            <span><strong>AI helps with everything except your money.</strong> AI investing apps analyze but can't execute. Research tools surface data but can't act. You still do everything manually.</span>
+            <span><strong>AI helps with everything except your money.</strong> AI investing apps analyze but can't execute. Research tools surface data but can't act on it. You're still checking five apps and doing everything by hand.</span>
           </li>
           <li>
             <span class="pain-marker">&#9672;</span>
-            <span><strong>Robo-advisors demand control surrender.</strong> Hand over your portfolio, accept their allocation, lose all customization. Schwab just exited the middle tier entirely.</span>
+            <span><strong>Robo-advisors demand control surrender.</strong> Hand over your portfolio and accept their allocation. No customization. Schwab just exited the middle tier entirely.</span>
           </li>
           <li>
             <span class="pain-marker">&#9670;</span>
@@ -379,8 +402,8 @@ body {
 
       <div class="section">
         <div class="label">Why Now</div>
-        <p><em>eToro launched Agent Portfolios</em> with explicit OpenClaw support &mdash; the first retail brokerage to offer ring-fenced AI trading sub-portfolios. The API door is open. Nobody has built the hallway.</p>
-        <p><strong>Schwab exited middle-tier robo-advice</strong> in Jan 2026. The market is bifurcating: either full automation or premium advisory. Fe occupies the gap &mdash; an agent that's smarter than a robo-advisor and safer than full autonomy.</p>
+        <p><em>eToro launched Agent Portfolios</em> with explicit OpenClaw support. First retail brokerage to offer ring-fenced AI trading sub-portfolios. The access exists. Nobody has built the intelligence layer on top of it.</p>
+        <p><strong>Schwab exited middle-tier robo-advice</strong> in Jan 2026. The market is bifurcating: either full automation or premium advisory. Fe occupies the gap: smarter than a robo-advisor, safer than full autonomy.</p>
       </div>
 
       <div class="section">
@@ -411,9 +434,9 @@ body {
 
       <div class="section">
         <div class="label label--teal">The Solution</div>
-        <p>Fe is an <strong>OpenClaw skill</strong> that turns your AI assistant into a financial agent. It monitors your portfolio, generates daily briefings from real market data, and executes trades with your permission &mdash; never autonomously.</p>
-        <p><strong>Not another dashboard.</strong> Fe delivers through Telegram, Slack, Discord, or any messaging surface. You talk to it the way you'd talk to a smart friend who watches the markets for you.</p>
-        <p>Every trade intent is signed. Every risk check produces a validation artifact. On-chain reputation via <strong>ERC-8004</strong> means Fe's track record is verifiable &mdash; not a marketing page, a registry anyone can audit.</p>
+        <p>Fe is an <strong>OpenClaw skill</strong> that turns your AI assistant into a financial agent. It monitors your portfolio, generates daily briefings from real market data, and executes trades only when you approve.</p>
+        <p>Fe delivers through Telegram, Slack, Discord, or whatever messaging surface you already use. You talk to it the way you'd talk to a smart friend who watches the markets for you.</p>
+        <p>Trade intents are signed. Risk checks produce validation artifacts. On-chain reputation via <strong>ERC-8004</strong> means Fe's track record is a public registry anyone can audit.</p>
       </div>
 
       <div class="section">
@@ -433,14 +456,14 @@ body {
           </li>
           <li>
             <span class="pain-marker" style="color:var(--teal)">&#9656;</span>
-            <span><strong>Published research on agent trust.</strong> The AX series on agent experience design establishes thought leadership in the trust layer nobody else is building.</span>
+            <span><strong>Published research on agent trust.</strong> The AX series on agent experience design. Four articles on how agents decide which tools to call, why they skip most of them, and what that means for tool builders.</span>
           </li>
         </ul>
       </div>
 
       <div class="section">
         <div class="label--dim label">Team</div>
-        <p><strong>Peleke Sengstacke</strong> &mdash; AI/ML engineer, curriculum designer, full-stack builder. Builds agent skills on OpenClaw. Published the AX series on agent experience and tool trust mechanics.</p>
+        <p><strong>Peleke Sengstacke</strong>. Builds agent skills on OpenClaw. Previously Principal Engineer at 2U/edX ($80MM+ ARR sandbox platform, $750M acquisition). Published the AX series on agent trust mechanics.</p>
         <p>Joined by an <strong>operations lead</strong> and <strong>head of engineering</strong>. Advisory network includes founders with fintech distribution experience.</p>
       </div>
 
